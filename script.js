@@ -22,7 +22,19 @@ function browseView() {
 
   const itemBoxes = document.querySelector("#itemBoxes");
   itemBoxes.innerHTML = "";
-  products.slice(0, 20).forEach((product) => {
+
+  const categories = [...new Set(data.products.map((p) => p.category))];
+  categories.forEach((category) => {
+    const categoryHeader = document.createElement("h2");
+    let text = category.replace(/-/g, " ");
+    text = text.charAt(0).toUpperCase() + text.slice(1);
+    text = text.replace(/\b\w/g, (c) => c.toUpperCase());
+    categoryHeader.textContent = text;
+    itemBoxes.appendChild(categoryHeader);
+  });
+  console.log(categories);
+
+  products.forEach((product) => {
     const productCard = document.createElement("div");
     const img = document.createElement("img");
     const productCardBody = document.createElement("div");
