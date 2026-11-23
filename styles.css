@@ -1,68 +1,97 @@
 body {
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family:
+    ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", "Courier New",
+    monospace;
 }
-#items{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#title{
-    padding:10px;
-    background-color: #f2f2f2;
-    border-radius: 1rem;
+#items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#title > h2{
-    padding-left: 3rem;
+#title {
+  padding: 10px;
+  background-color: #f2f2f2;
+  border-radius: 1rem;
 }
 
-#itemBoxes{
-    display: flex;
-    margin:10px;
-    min-height: 50rem;
-    max-width: 49rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-    
+#title > h2 {
+  padding-left: 3rem;
 }
 
-.github{
-    width: 20px;
-    height: 20px;
+#itemBoxes {
+  display: flex;
+  margin: 10px;
+  min-height: 50rem;
+  max-width: 49rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.productImage{
-    height: 200px; 
-    width: auto;
-    background-color: white;
-    border: 1px solid black;
-    cursor: pointer;
+#logo {
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
-
-.productCard{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 250px;
+#navbar {
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.productCardBody{
-    display: flex;
-    max-width: 200px;
+#centreButtons {
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.addButton{
-    margin:auto;
-    margin-left: 20px;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    background-color: #bebebe;
+#navbar button {
+  margin: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
-footer{
-    text-align: center;
-    margin-top: 20px;
+.github {
+  width: 20px;
+  height: 20px;
+}
+
+.productImage {
+  height: 200px;
+  width: auto;
+  background-color: white;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.productCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+}
+
+.productCardBody {
+  display: flex;
+  max-width: 200px;
+}
+
+.addButton {
+  margin: auto;
+  margin-left: 20px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  background-color: #bebebe;
+}
+
+footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.hidden {
+  display: none;
 }
