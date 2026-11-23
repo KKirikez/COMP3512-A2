@@ -4,7 +4,7 @@ body {
   font-family:
     ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", "Courier New",
     monospace;
-  min-height: 100vh;
+  height: 100vh;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -13,29 +13,36 @@ body {
 
 #views {
   flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#browseView,
+#browseLayout {
+  height: 100%;
 }
 
 #browseLayout {
   display: grid;
   grid-template-columns: 15rem minmax(0, 1fr);
-  min-height: calc(100vh - var(--navbar-height) - var(--footer-height));
+  min-height: 0;
 }
 
 #sidePanel {
   box-sizing: border-box;
-  position: sticky;
-  top: var(--navbar-height);
-  align-self: start;
-  height: calc(100vh - var(--navbar-height) - var(--footer-height));
+  height: 100%;
   padding: 1rem;
   border: 1px solid #999;
 }
 
 #items {
   min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 
 #title {
