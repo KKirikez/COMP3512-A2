@@ -11,19 +11,30 @@
     <div id="navbar">
       <img id="logo" src="assets/logo.jpeg" alt="Logo" />
       <div id="centreButtons">
-        <button id="homeButton">Home</button>
-        <button id="browseButton">Browse</button>
-        <button id="aboutButton">About</button>
+        <button id="homeButton">
+          Home <img class="icon" src="assets/home.svg" />
+        </button>
+        <button id="browseButton">
+          Browse <img class="icon" src="assets/browse.svg" />
+        </button>
+        <button id="aboutButton">
+          About <img class="icon" src="assets/about.svg" />
+        </button>
       </div>
-      <button id="cartButton">Cart</button>
+      <button id="cartButton">
+        Cart <img class="icon" src="assets/cart.svg" />
+      </button>
     </div>
     <div id="views">
       <div id="homeView" class="view">Home View</div>
       <div id="browseView" class="view hidden">
-        <div id="items">
-          <div id="title">
-            <h2>Filter</h2>
-            <div id="itemBoxes"></div>
+        <div id="browseLayout">
+          <aside id="sidePanel">Side Panel</aside>
+          <div id="items">
+            <div id="title">
+              <h2>Browse</h2>
+              <div id="itemBoxes"></div>
+            </div>
           </div>
         </div>
       </div>
