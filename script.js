@@ -24,17 +24,23 @@ function browseView() {
   itemBoxes.innerHTML = "";
 
   const categories = [...new Set(data.products.map((p) => p.category))];
+  const categoryBoxes = new Map();
   categories.forEach((category) => {
+    const categoryBox = document.createElement("div");
     const categoryHeader = document.createElement("h2");
+    categoryBox.classList.add("categoryBox");
+    categoryHeader.classList.add("categoryHeader");
     let text = category.replace(/-/g, " ");
     text = text.charAt(0).toUpperCase() + text.slice(1);
     text = text.replace(/\b\w/g, (c) => c.toUpperCase());
     categoryHeader.textContent = text;
-    itemBoxes.appendChild(categoryHeader);
+    categoryBox.appendChild(categoryHeader);
+    categoryBoxes.set(category, categoryBox);
+    itemBoxes.appendChild(categoryBox);
   });
   console.log(categories);
 
-  products.forEach((product) => {
+  products.slice(0, 20).forEach((product) => {
     const productCard = document.createElement("div");
     const img = document.createElement("img");
     const productCardBody = document.createElement("div");
@@ -75,7 +81,13 @@ function browseView() {
 
     productCard.appendChild(img);
     productCard.appendChild(productCardBody);
-    itemBoxes.appendChild(productCard);
+    categoryBoxes.get(product.category).appendChild(productCard);
+  });
+
+  categoryBoxes.forEach((categoryBox) => {
+    if (categoryBox.childElementCount === 1) {
+      categoryBox.classList.add("hidden");
+    }
   });
 }
 function cartView() {

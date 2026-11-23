@@ -34,11 +34,21 @@ body {
 
 #itemBoxes {
   display: flex;
+  flex-direction: column;
   margin: 10px;
-  min-height: 50rem;
   max-width: 83rem;
+  gap: 1rem;
+}
+
+.categoryBox {
+  display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  width: 100%;
+}
+
+.categoryHeader {
+  flex-basis: 100%;
 }
 
 #logo {
