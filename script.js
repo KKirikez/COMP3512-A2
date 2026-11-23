@@ -3,25 +3,26 @@ import data from "./data/data-pretty.json" with { type: "json" };
 function renderView(view) {
   const views = document.querySelectorAll(".view");
   views.forEach((v) => {
-    v.style.display = "none";
+    v.classList.add("hidden");
   });
-
   const viewElement = document.querySelector(`#${view}`);
   if (viewElement) {
-    viewElement.style.display = "block";
+    viewElement.classList.remove("hidden");
   }
 }
 
 function homeView() {
+  console.log("home");
   renderView("homeView");
 }
-function browserView() {
-  renderView("browserView");
+function browseView() {
+  console.log("browse");
+  renderView("browseView");
   let products = data.products;
 
   const itemBoxes = document.querySelector("#itemBoxes");
+  itemBoxes.innerHTML = "";
   products.slice(0, 20).forEach((product) => {
-    console.log(product);
     const productCard = document.createElement("div");
     const img = document.createElement("img");
     const productCardBody = document.createElement("div");
@@ -66,11 +67,7 @@ function browserView() {
   });
 }
 function cartView() {
-  renderView("cartView");
-}
-function checkoutView() {
-  // Could be cool to add, not in assignment spec
-  renderView("checkoutView");
+  renderView("shoppingCartView");
 }
 function aboutView() {
   renderView("aboutView");
@@ -79,15 +76,13 @@ function aboutView() {
 document.addEventListener("DOMContentLoaded", () => {
   const homeButton = document.querySelector("#homeButton");
   const logoButton = document.querySelector("#logo");
-  const browserButton = document.querySelector("#browserButton");
+  const browseButton = document.querySelector("#browseButton");
   const cartButton = document.querySelector("#cartButton");
-  const checkoutButton = document.querySelector("#checkoutButton");
   const aboutButton = document.querySelector("#aboutButton");
 
   homeButton.addEventListener("click", homeView);
   logoButton.addEventListener("click", homeView);
-  browserButton.addEventListener("click", browserView);
+  browseButton.addEventListener("click", browseView);
   cartButton.addEventListener("click", cartView);
-  checkoutButton.addEventListener("click", checkoutView);
   aboutButton.addEventListener("click", aboutView);
 });
