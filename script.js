@@ -13,6 +13,35 @@ function renderView(view) {
   }
 }
 
+function updateCartCount() {
+  const cartCount = document.querySelector("#cartCount");
+  cartCount.textContent = cart.length;
+  cartCount.classList.toggle("hidden", cart.length === 0);
+}
+
+function createStars(rating) {
+  const stars = document.createElement("div");
+  stars.classList.add("stars");
+  stars.title = `${rating} / 5`;
+  const rounded = Math.round(rating * 2) / 2;
+
+  for (let i = 1; i <= 5; i++) {
+    const star = document.createElement("img");
+    star.classList.add("star");
+    if (rounded >= i) {
+      star.src = "assets/star_full.svg";
+      star.classList.add("fullStar");
+    } else if (rounded >= i - 0.5) {
+      star.src = "assets/star_half.svg";
+    } else {
+      star.src = "assets/star.svg";
+    }
+    star.alt = "";
+    stars.appendChild(star);
+  }
+  return stars;
+}
+
 function homeView() {
   console.log("home");
   renderView("homeView");
@@ -47,23 +76,35 @@ function browseView() {
     const img = document.createElement("img");
     const productCardBody = document.createElement("div");
     const cardTitle = document.createElement("h3");
+    const brand = document.createElement("p");
+    const stars = createStars(product.rating);
+    const priceRow = document.createElement("div");
     const price = document.createElement("p");
-    const text = document.createElement("div");
     const addButton = document.createElement("button");
 
-    productCard.appendChild(img);
+    brand.classList.add("brand");
+    priceRow.classList.add("priceRow");
+    brand.textContent = product.brand ?? "";
 
-    text.appendChild(cardTitle);
-    text.appendChild(price);
-    productCardBody.appendChild(text);
-    productCardBody.appendChild(addButton);
+    priceRow.appendChild(price);
+    priceRow.appendChild(addButton);
+    productCardBody.appendChild(cardTitle);
+    productCardBody.appendChild(brand);
+    productCardBody.appendChild(stars);
+    productCardBody.appendChild(priceRow);
 
     img.src = product.images[0];
     img.alt = product.title;
-    addButton.textContent = "+";
+    const cartIcon = document.createElement("img");
+    cartIcon.src = "assets/cart_add.svg";
+    cartIcon.alt = "";
+    cartIcon.classList.add("icon");
+    addButton.textContent = "Add to cart ";
+    addButton.appendChild(cartIcon);
 
     addButton.addEventListener("click", () => {
       cart.push(product);
+      updateCartCount();
       console.log(cart);
     });
 
@@ -93,6 +134,7 @@ function browseView() {
 }
 function cartView() {
   renderView("shoppingCartView");
+  updateCartCount();
   const cartList = document.querySelector("#cartList");
   cartList.innerHTML = "";
 
@@ -107,7 +149,7 @@ function cartView() {
 
   const header = document.createElement("div");
   header.classList.add("cartRow", "cartHeader");
-  ["Items", "", "Price", "Quantity", "Subtotal"].forEach((label) => {
+  ["Items", "", "Price", "Quantity", "Subtotal", ""].forEach((label) => {
     const cell = document.createElement("span");
     cell.textContent = label;
     header.appendChild(cell);
@@ -124,6 +166,14 @@ function cartView() {
     const qty = document.createElement("span");
     const addButton = document.createElement("button");
     const subtotal = document.createElement("span");
+    const removeAllButton = document.createElement("button");
+
+    removeAllButton.textContent = "Remove all";
+    removeAllButton.classList.add("removeAllButton");
+    removeAllButton.addEventListener("click", () => {
+      cart = cart.filter((item) => item.id !== product.id);
+      cartView();
+    });
 
     row.classList.add("cartRow");
     qtyBox.classList.add("qtyBox");
@@ -160,11 +210,12 @@ function cartView() {
     row.appendChild(price);
     row.appendChild(qtyBox);
     row.appendChild(subtotal);
+    row.appendChild(removeAllButton);
     cartList.appendChild(row);
   });
 }
-function aboutView() {
-  renderView("aboutView");
+function openAbout() {
+  document.querySelector("#aboutDialog").showModal();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -178,5 +229,14 @@ document.addEventListener("DOMContentLoaded", () => {
   logoButton.addEventListener("click", homeView);
   browseButton.addEventListener("click", browseView);
   cartButton.addEventListener("click", cartView);
-  aboutButton.addEventListener("click", aboutView);
+  const aboutDialog = document.querySelector("#aboutDialog");
+  const closeAbout = document.querySelector("#closeAbout");
+
+  aboutButton.addEventListener("click", openAbout);
+  closeAbout.addEventListener("click", () => aboutDialog.close());
+  aboutDialog.addEventListener("click", (e) => {
+    if (e.target === aboutDialog) {
+      aboutDialog.close();
+    }
+  });
 });

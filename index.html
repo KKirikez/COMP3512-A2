@@ -23,6 +23,7 @@
       </div>
       <button id="cartButton">
         Cart <img class="icon" src="assets/cart.svg" />
+        <span id="cartCount" class="hidden">0</span>
       </button>
     </div>
     <div id="views">
@@ -43,8 +44,28 @@
         Shopping Cart View
         <div id="cartList"></div>
       </div>
-      <div id="aboutView" class="view hidden">About View</div>
     </div>
+    <dialog id="aboutDialog">
+      <h2>About Us</h2>
+      <p>
+        This site is the second assignment for COMP 3512 (Web Development 2) at
+        Mount Royal University, taken with professor Randy Connolly.
+      </p>
+      <p>
+        The site uses vanilla HTML, CSS, and Javascript. The site is hosted on a
+        personal server, inside a docker-compose with a simple nginx reverse
+        proxy. Domain routing is provided by a cloudflared tunnel linked to a
+        personal domain.
+      </p>
+      <p>This assignment was created by Konstantin Kirikeza.</p>
+      <p>
+        A link the the source code can be found here:
+        <a href="https://github.com/KKirikez/COMP3512-A1" target="_blank"
+          ><img class="github" src="assets/github.svg"
+        /></a>
+      </p>
+      <button id="closeAbout">Close</button>
+    </dialog>
     <footer>
       <h3>
         Source Code:

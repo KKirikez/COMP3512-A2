@@ -101,8 +101,25 @@ body {
 
 #navbar button {
   margin: 1rem;
-  width: 3.5rem;
+  width: 7rem;
   height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+#cartCount {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background-color: #d32f2f;
+  color: white;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
 }
 
 .icon {
@@ -116,8 +133,10 @@ body {
 }
 
 .productImage {
-  height: 200px;
-  width: auto;
+  box-sizing: border-box;
+  width: 100%;
+  height: 230px;
+  object-fit: contain;
   background-color: white;
   border: 1px solid black;
   cursor: pointer;
@@ -126,20 +145,62 @@ body {
 .productCard {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 250px;
+  width: 200px;
 }
 
 .productCardBody {
   display: flex;
-  max-width: 200px;
+  flex-direction: column;
+  width: 100%;
+}
+
+.productCardBody h3 {
+  margin: 10px 0 6px;
+  line-height: 1.3em;
+  height: 2.6em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.brand {
+  margin: 0 0 6px;
+  color: #555;
+  line-height: 1.3em;
+  height: 1.3em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stars {
+  display: flex;
+}
+
+.star {
+  width: 18px;
+  height: 18px;
+}
+
+.fullStar {
+  box-sizing: border-box;
+  padding: 1.5px;
+}
+
+.priceRow {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .addButton {
-  margin: auto;
-  margin-left: 20px;
-  width: 30px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   height: 30px;
+  padding: 0 10px;
   cursor: pointer;
   background-color: #bebebe;
 }
@@ -151,7 +212,7 @@ body {
 
 .cartRow {
   display: grid;
-  grid-template-columns: 170px 1fr 100px 120px 100px;
+  grid-template-columns: 170px 1fr 100px 120px 100px 110px;
   align-items: center;
   gap: 10px;
   padding: 10px 0;
@@ -161,10 +222,26 @@ body {
   font-weight: bold;
 }
 
+#aboutDialog {
+  max-width: 500px;
+  padding: 20px 30px;
+  border: none;
+  border-radius: 8px;
+}
+
+#aboutDialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
 .qtyBox {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.removeAllButton {
+  height: 28px;
+  cursor: pointer;
 }
 
 .qtyButton {
