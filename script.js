@@ -1,5 +1,7 @@
 import data from "./data/data-pretty.json" with { type: "json" };
 
+let cart = [];
+
 function renderView(view) {
   const views = document.querySelectorAll(".view");
   views.forEach((v) => {
@@ -61,9 +63,8 @@ function browseView() {
     addButton.textContent = "+";
 
     addButton.addEventListener("click", () => {
-      alert(
-        `You clicked on ${product.title}, which has an ID of ${product.id}`,
-      );
+      cart.push(product);
+      console.log(cart);
     });
 
     img.addEventListener("click", () => {
@@ -92,6 +93,75 @@ function browseView() {
 }
 function cartView() {
   renderView("shoppingCartView");
+  const cartList = document.querySelector("#cartList");
+  cartList.innerHTML = "";
+
+  const grouped = new Map();
+  cart.forEach((item) => {
+    if (grouped.has(item.id)) {
+      grouped.get(item.id).quantity++;
+    } else {
+      grouped.set(item.id, { product: item, quantity: 1 });
+    }
+  });
+
+  const header = document.createElement("div");
+  header.classList.add("cartRow", "cartHeader");
+  ["Items", "", "Price", "Quantity", "Subtotal"].forEach((label) => {
+    const cell = document.createElement("span");
+    cell.textContent = label;
+    header.appendChild(cell);
+  });
+  cartList.appendChild(header);
+
+  grouped.forEach(({ product, quantity }) => {
+    const row = document.createElement("div");
+    const removeButton = document.createElement("button");
+    const thumbnail = document.createElement("img");
+    const title = document.createElement("span");
+    const price = document.createElement("span");
+    const qtyBox = document.createElement("div");
+    const qty = document.createElement("span");
+    const addButton = document.createElement("button");
+    const subtotal = document.createElement("span");
+
+    row.classList.add("cartRow");
+    qtyBox.classList.add("qtyBox");
+    removeButton.classList.add("qtyButton");
+    addButton.classList.add("qtyButton");
+    thumbnail.classList.add("thumbnail");
+
+    removeButton.textContent = "-";
+    removeButton.addEventListener("click", () => {
+      const index = cart.findLastIndex((item) => item.id === product.id);
+      if (index !== -1) {
+        cart.splice(index, 1);
+      }
+      cartView();
+    });
+    addButton.textContent = "+";
+    addButton.addEventListener("click", () => {
+      cart.push(product);
+      cartView();
+    });
+    thumbnail.src = product.images[0];
+    thumbnail.alt = product.title;
+    title.textContent = product.title;
+    price.textContent = `$${product.price.toFixed(2)}`;
+    qty.textContent = quantity;
+    subtotal.textContent = `$${(product.price * quantity).toFixed(2)}`;
+
+    qtyBox.appendChild(removeButton);
+    qtyBox.appendChild(qty);
+    qtyBox.appendChild(addButton);
+
+    row.appendChild(thumbnail);
+    row.appendChild(title);
+    row.appendChild(price);
+    row.appendChild(qtyBox);
+    row.appendChild(subtotal);
+    cartList.appendChild(row);
+  });
 }
 function aboutView() {
   renderView("aboutView");

@@ -144,6 +144,34 @@ body {
   background-color: #bebebe;
 }
 
+.thumbnail {
+  width: 150px;
+  height: auto;
+}
+
+.cartRow {
+  display: grid;
+  grid-template-columns: 170px 1fr 100px 120px 100px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.cartHeader {
+  font-weight: bold;
+}
+
+.qtyBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qtyButton {
+  width: 28px;
+  height: 28px;
+}
+
 footer {
   position: sticky;
   bottom: 0;
