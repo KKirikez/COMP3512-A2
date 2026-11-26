@@ -231,12 +231,29 @@ document.addEventListener("DOMContentLoaded", () => {
   cartButton.addEventListener("click", cartView);
   const aboutDialog = document.querySelector("#aboutDialog");
   const closeAbout = document.querySelector("#closeAbout");
+  const cartDialog = document.querySelector("#cartPopup");
 
   cartButton.addEventListener("mouseenter", () => {
-    console.log("cart hover");
+    cartDialog.show();
+    const cartPopupItems = document.querySelector("#cartPopupItems");
+    cart.forEach((item) => {
+      const itemBox = document.createElement("div");
+      itemBox.classList.add("popupItemBox");
+      const thumbnail = document.createElement("img");
+      const title = document.createElement("p");
+      const count = document.createElement("p");
+      thumbnail.src = item.images[0];
+      title.textContent = item.title;
+      count.textContent = "67";
+
+      itemBox.appendChild(thumbnail);
+      itemBox.appendChild(title);
+      itemBox.appendChild(count);
+      cartPopupItems.appendChild(itemBox);
+    });
   });
   cartButton.addEventListener("mouseleave", () => {
-    console.log("cart leave");
+    cartDialog.close();
   });
 
   aboutButton.addEventListener("click", openAbout);

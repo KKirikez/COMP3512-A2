@@ -233,6 +233,15 @@ body {
   background: rgba(0, 0, 0, 0.5);
 }
 
+.popupItemBox {
+  /* background-color: red; */
+}
+
+.popupItemBox img {
+  width: 40px;
+  height: auto;
+}
+
 .qtyBox {
   display: flex;
   align-items: center;
