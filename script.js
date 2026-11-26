@@ -132,12 +132,7 @@ function browseView() {
     }
   });
 }
-function cartView() {
-  renderView("shoppingCartView");
-  updateCartCount();
-  const cartList = document.querySelector("#cartList");
-  cartList.innerHTML = "";
-
+function groupCart() {
   const grouped = new Map();
   cart.forEach((item) => {
     if (grouped.has(item.id)) {
@@ -146,6 +141,15 @@ function cartView() {
       grouped.set(item.id, { product: item, quantity: 1 });
     }
   });
+  return grouped;
+}
+function cartView() {
+  renderView("shoppingCartView");
+  updateCartCount();
+  const cartList = document.querySelector("#cartList");
+  cartList.innerHTML = "";
+
+  const grouped = groupCart();
 
   const header = document.createElement("div");
   header.classList.add("cartRow", "cartHeader");
@@ -234,9 +238,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const cartDialog = document.querySelector("#cartPopup");
 
   cartButton.addEventListener("mouseenter", () => {
+    if(cart.length > 0){
     cartDialog.show();
     const cartPopupItems = document.querySelector("#cartPopupItems");
-    cart.forEach((item) => {
+    cartPopupItems.innerHTML = "";
+    groupCart().forEach(({ product: item, quantity }) => {
       const itemBox = document.createElement("div");
       itemBox.classList.add("popupItemBox");
       const thumbnail = document.createElement("img");
@@ -244,13 +250,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const count = document.createElement("p");
       thumbnail.src = item.images[0];
       title.textContent = item.title;
-      count.textContent = "67";
+      count.textContent = `x${quantity}`;
 
       itemBox.appendChild(thumbnail);
       itemBox.appendChild(title);
       itemBox.appendChild(count);
       cartPopupItems.appendChild(itemBox);
     });
+    }
   });
   cartButton.addEventListener("mouseleave", () => {
     cartDialog.close();
