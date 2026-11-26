@@ -232,6 +232,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const aboutDialog = document.querySelector("#aboutDialog");
   const closeAbout = document.querySelector("#closeAbout");
 
+  cartButton.addEventListener("mouseenter", () => {
+    console.log("cart hover");
+  });
+  cartButton.addEventListener("mouseleave", () => {
+    console.log("cart leave");
+  });
+
   aboutButton.addEventListener("click", openAbout);
   closeAbout.addEventListener("click", () => aboutDialog.close());
   aboutDialog.addEventListener("click", (e) => {
