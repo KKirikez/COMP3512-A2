@@ -86,6 +86,7 @@ function updateRatingDisplay() {
 function browseView() {
   console.log("browse");
   renderView("browseView");
+
   const selectedCategories = [
     ...document.querySelectorAll("#categoryFilters input:checked"),
   ].map((input) => input.value);
@@ -94,9 +95,7 @@ function browseView() {
     products = products.filter((p) => selectedCategories.includes(p.category));
   }
   const minRating = Number(document.querySelector("#ratingSlider").value);
-  products = products.filter(
-    (p) => Math.round(p.rating * 2) / 2 >= minRating,
-  );
+  products = products.filter((p) => Math.round(p.rating * 2) / 2 >= minRating);
   const minPrice = document.querySelector("#minPrice").value;
   const maxPrice = document.querySelector("#maxPrice").value;
   if (minPrice !== "") {
@@ -323,6 +322,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector("#ratingSlider").addEventListener("input", () => {
     updateRatingDisplay();
     browseView();
+  });
+  const sidebarSearch = document.querySelector("#sidebarSearch");
+  sidebarSearch.addEventListener("input", () => {
+    console.log(sidebarSearch.textValue);
   });
   document.querySelector("#minPrice").addEventListener("input", browseView);
   document.querySelector("#maxPrice").addEventListener("input", browseView);
