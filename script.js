@@ -43,8 +43,13 @@ function createStars(rating) {
 }
 
 function homeView() {
-  console.log("home");
   renderView("homeView");
+  let products = data.products;
+  const featuredSection = document.querySelector("#featured");
+  const productIndex = Math.floor(Math.random() * products.length);
+  console.log(productIndex);
+  let featuredProduct = products[productIndex];
+  console.log(featuredProduct);
 }
 function getCategories() {
   return [...new Set(data.products.map((p) => p.category))];
@@ -104,7 +109,10 @@ function browseView() {
   if (maxPrice !== "") {
     products = products.filter((p) => p.price <= Number(maxPrice));
   }
-  const search = document.querySelector("#sidebarSearch").value.trim().toLowerCase();
+  const search = document
+    .querySelector("#sidebarSearch")
+    .value.trim()
+    .toLowerCase();
   if (search !== "") {
     products = products.filter((p) => p.title.toLowerCase().includes(search));
   }
@@ -382,4 +390,6 @@ document.addEventListener("DOMContentLoaded", () => {
       aboutDialog.close();
     }
   });
+
+  homeView();
 });
