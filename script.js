@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   const sidebarSearch = document.querySelector("#sidebarSearch");
   sidebarSearch.addEventListener("input", () => {
-    console.log(sidebarSearch.textValue);
+    console.log(sidebarSearch.value);
   });
   document.querySelector("#minPrice").addEventListener("input", browseView);
   document.querySelector("#maxPrice").addEventListener("input", browseView);
