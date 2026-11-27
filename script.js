@@ -104,6 +104,10 @@ function browseView() {
   if (maxPrice !== "") {
     products = products.filter((p) => p.price <= Number(maxPrice));
   }
+  const search = document.querySelector("#sidebarSearch").value.trim().toLowerCase();
+  if (search !== "") {
+    products = products.filter((p) => p.title.toLowerCase().includes(search));
+  }
 
   const itemBoxes = document.querySelector("#itemBoxes");
   itemBoxes.innerHTML = "";
@@ -324,9 +328,7 @@ document.addEventListener("DOMContentLoaded", () => {
     browseView();
   });
   const sidebarSearch = document.querySelector("#sidebarSearch");
-  sidebarSearch.addEventListener("input", () => {
-    console.log(sidebarSearch.value);
-  });
+  sidebarSearch.addEventListener("input", browseView);
   document.querySelector("#minPrice").addEventListener("input", browseView);
   document.querySelector("#maxPrice").addEventListener("input", browseView);
   document.querySelector("#sortSelect").addEventListener("change", browseView);
@@ -338,6 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#ratingSlider").value = 1;
     document.querySelector("#minPrice").value = "";
     document.querySelector("#maxPrice").value = "";
+    sidebarSearch.value = "";
     updateRatingDisplay();
     browseView();
   });
