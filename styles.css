@@ -33,6 +33,41 @@ body {
   height: 100%;
   padding: 1rem;
   border: 1px solid #999;
+  overflow-y: auto;
+}
+
+#sidePanel h3 {
+  margin-top: 0;
+}
+
+#ratingSlider {
+  width: 100%;
+  cursor: pointer;
+}
+
+#ratingDisplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#priceFilters {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#priceFilters input {
+  width: 100%;
+  min-width: 0;
+}
+
+.categoryFilter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  cursor: pointer;
 }
 
 #items {
@@ -51,8 +86,26 @@ body {
   border-radius: 1rem;
 }
 
-#title > h2 {
+#browseHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#browseHeader h2 {
   padding-left: 3rem;
+  margin-right: auto;
+}
+
+#sortSelect {
+  height: 2rem;
+}
+
+#clearSort {
+  height: 2rem;
+  margin-right: 1rem;
+  cursor: pointer;
 }
 
 #itemBoxes {

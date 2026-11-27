@@ -33,10 +33,48 @@
       <div id="homeView" class="view">Home View</div>
       <div id="browseView" class="view hidden">
         <div id="browseLayout">
-          <aside id="sidePanel">Side Panel</aside>
+          <aside id="sidePanel">
+            <h3>Search</h3>
+            <input if="sidebarSearch" type="text" placeholder="Search" />
+            <h3>Categories</h3>
+            <div id="categoryFilters"></div>
+            <h3>Minimum Rating</h3>
+            <input
+              id="ratingSlider"
+              type="range"
+              min="1"
+              max="5"
+              step="1"
+              value="1"
+            />
+            <div id="ratingDisplay"></div>
+            <h3>Price</h3>
+            <div id="priceFilters">
+              <input id="minPrice" type="number" min="0" placeholder="Min $" />
+              <span>to</span>
+              <input id="maxPrice" type="number" min="0" placeholder="Max $" />
+            </div>
+          </aside>
           <div id="items">
             <div id="title">
-              <h2>Browse</h2>
+              <div id="browseHeader">
+                <h2>Browse</h2>
+                <label for="sortSelect">Sort by</label>
+                <select id="sortSelect">
+                  <option value="">Category</option>
+                  <option value="title-asc">Name (A-Z)</option>
+                  <option value="title-desc">Name (Z-A)</option>
+                  <option value="price-asc">Price (Low to High)</option>
+                  <option value="price-desc">Price (High to Low)</option>
+                  <option value="rating-asc">Rating (Low to High)</option>
+                  <option value="rating-desc">Rating (High to Low)</option>
+                  <option value="stock-asc">Stock (Low to High)</option>
+                  <option value="stock-desc">Stock (High to Low)</option>
+                  <option value="size-asc">Size (Small to Large)</option>
+                  <option value="size-desc">Size (Large to Small)</option>
+                </select>
+                <button id="clearSort">Clear</button>
+              </div>
               <div id="itemBoxes"></div>
             </div>
           </div>

@@ -46,25 +46,88 @@ function homeView() {
   console.log("home");
   renderView("homeView");
 }
+function getCategories() {
+  return [...new Set(data.products.map((p) => p.category))];
+}
+
+function formatCategory(category) {
+  let text = category.replace(/-/g, " ");
+  text = text.charAt(0).toUpperCase() + text.slice(1);
+  return text.replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function buildCategoryFilters() {
+  const categoryFilters = document.querySelector("#categoryFilters");
+  getCategories().forEach((category) => {
+    const label = document.createElement("label");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = category;
+    checkbox.addEventListener("change", browseView);
+    label.classList.add("categoryFilter");
+    label.appendChild(checkbox);
+    label.append(formatCategory(category));
+    categoryFilters.appendChild(label);
+  });
+}
+
+function updateRatingDisplay() {
+  const value = Number(document.querySelector("#ratingSlider").value);
+  const ratingDisplay = document.querySelector("#ratingDisplay");
+  ratingDisplay.innerHTML = "";
+  ratingDisplay.appendChild(createStars(value));
+  if (value != 5) {
+    ratingDisplay.append(`${value}+ stars`);
+  } else {
+    ratingDisplay.append(`${value} stars`);
+  }
+}
+
 function browseView() {
   console.log("browse");
   renderView("browseView");
+  const selectedCategories = [
+    ...document.querySelectorAll("#categoryFilters input:checked"),
+  ].map((input) => input.value);
   let products = data.products;
+  if (selectedCategories.length > 0) {
+    products = products.filter((p) => selectedCategories.includes(p.category));
+  }
+  const minRating = Number(document.querySelector("#ratingSlider").value);
+  products = products.filter(
+    (p) => Math.round(p.rating * 2) / 2 >= minRating,
+  );
+  const minPrice = document.querySelector("#minPrice").value;
+  const maxPrice = document.querySelector("#maxPrice").value;
+  if (minPrice !== "") {
+    products = products.filter((p) => p.price >= Number(minPrice));
+  }
+  if (maxPrice !== "") {
+    products = products.filter((p) => p.price <= Number(maxPrice));
+  }
 
   const itemBoxes = document.querySelector("#itemBoxes");
   itemBoxes.innerHTML = "";
 
-  const categories = [...new Set(data.products.map((p) => p.category))];
+  const sortValue = document.querySelector("#sortSelect").value;
+  if (sortValue) {
+    const sortedBox = document.createElement("div");
+    sortedBox.classList.add("categoryBox");
+    sortProducts(products.slice(0, 20), sortValue).forEach((product) => {
+      sortedBox.appendChild(createProductCard(product));
+    });
+    itemBoxes.appendChild(sortedBox);
+    return;
+  }
+
+  const categories = getCategories();
   const categoryBoxes = new Map();
   categories.forEach((category) => {
     const categoryBox = document.createElement("div");
     const categoryHeader = document.createElement("h2");
     categoryBox.classList.add("categoryBox");
     categoryHeader.classList.add("categoryHeader");
-    let text = category.replace(/-/g, " ");
-    text = text.charAt(0).toUpperCase() + text.slice(1);
-    text = text.replace(/\b\w/g, (c) => c.toUpperCase());
-    categoryHeader.textContent = text;
+    categoryHeader.textContent = formatCategory(category);
     categoryBox.appendChild(categoryHeader);
     categoryBoxes.set(category, categoryBox);
     itemBoxes.appendChild(categoryBox);
@@ -72,58 +135,7 @@ function browseView() {
   console.log(categories);
 
   products.slice(0, 20).forEach((product) => {
-    const productCard = document.createElement("div");
-    const img = document.createElement("img");
-    const productCardBody = document.createElement("div");
-    const cardTitle = document.createElement("h3");
-    const brand = document.createElement("p");
-    const stars = createStars(product.rating);
-    const priceRow = document.createElement("div");
-    const price = document.createElement("p");
-    const addButton = document.createElement("button");
-
-    brand.classList.add("brand");
-    priceRow.classList.add("priceRow");
-    brand.textContent = product.brand ?? "";
-
-    priceRow.appendChild(price);
-    priceRow.appendChild(addButton);
-    productCardBody.appendChild(cardTitle);
-    productCardBody.appendChild(brand);
-    productCardBody.appendChild(stars);
-    productCardBody.appendChild(priceRow);
-
-    img.src = product.images[0];
-    img.alt = product.title;
-    const cartIcon = document.createElement("img");
-    cartIcon.src = "assets/cart_add.svg";
-    cartIcon.alt = "";
-    cartIcon.classList.add("icon");
-    addButton.textContent = "Add to cart ";
-    addButton.appendChild(cartIcon);
-
-    addButton.addEventListener("click", () => {
-      cart.push(product);
-      updateCartCount();
-      console.log(cart);
-    });
-
-    img.addEventListener("click", () => {
-      alert(`This product has an ID of ${product.id}`);
-    });
-
-    img.classList.add("productImage");
-    productCard.classList.add("productCard");
-    productCardBody.classList.add("productCardBody");
-    addButton.classList.add("addButton");
-
-    cardTitle.textContent = product.title;
-
-    price.textContent = `$${product.price.toFixed(2)}`;
-
-    productCard.appendChild(img);
-    productCard.appendChild(productCardBody);
-    categoryBoxes.get(product.category).appendChild(productCard);
+    categoryBoxes.get(product.category).appendChild(createProductCard(product));
   });
 
   categoryBoxes.forEach((categoryBox) => {
@@ -131,6 +143,80 @@ function browseView() {
       categoryBox.classList.add("hidden");
     }
   });
+}
+
+const sortKeys = {
+  title: (p) => p.title,
+  price: (p) => p.price,
+  rating: (p) => p.rating,
+  stock: (p) => p.stock,
+  size: (p) => p.dimensions.width * p.dimensions.height * p.dimensions.depth,
+};
+
+function sortProducts(products, sortValue) {
+  const [key, direction] = sortValue.split("-");
+  const getValue = sortKeys[key];
+  return [...products].sort((a, b) => {
+    const x = getValue(a);
+    const y = getValue(b);
+    const result = typeof x === "string" ? x.localeCompare(y) : x - y;
+    return direction === "desc" ? -result : result;
+  });
+}
+
+function createProductCard(product) {
+  const productCard = document.createElement("div");
+  const img = document.createElement("img");
+  const productCardBody = document.createElement("div");
+  const cardTitle = document.createElement("h3");
+  const brand = document.createElement("p");
+  const stars = createStars(product.rating);
+  const priceRow = document.createElement("div");
+  const price = document.createElement("p");
+  const addButton = document.createElement("button");
+
+  brand.classList.add("brand");
+  priceRow.classList.add("priceRow");
+  brand.textContent = product.brand ?? "";
+
+  priceRow.appendChild(price);
+  priceRow.appendChild(addButton);
+  productCardBody.appendChild(cardTitle);
+  productCardBody.appendChild(brand);
+  productCardBody.appendChild(stars);
+  productCardBody.appendChild(priceRow);
+
+  img.src = product.images[0];
+  img.alt = product.title;
+  const cartIcon = document.createElement("img");
+  cartIcon.src = "assets/cart_add.svg";
+  cartIcon.alt = "";
+  cartIcon.classList.add("icon");
+  addButton.textContent = "Add to cart ";
+  addButton.appendChild(cartIcon);
+
+  addButton.addEventListener("click", () => {
+    cart.push(product);
+    updateCartCount();
+    console.log(cart);
+  });
+
+  img.addEventListener("click", () => {
+    alert(`This product has an ID of ${product.id}`);
+  });
+
+  img.classList.add("productImage");
+  productCard.classList.add("productCard");
+  productCardBody.classList.add("productCardBody");
+  addButton.classList.add("addButton");
+
+  cardTitle.textContent = product.title;
+
+  price.textContent = `$${product.price.toFixed(2)}`;
+
+  productCard.appendChild(img);
+  productCard.appendChild(productCardBody);
+  return productCard;
 }
 function groupCart() {
   const grouped = new Map();
@@ -232,31 +318,51 @@ document.addEventListener("DOMContentLoaded", () => {
   homeButton.addEventListener("click", homeView);
   logoButton.addEventListener("click", homeView);
   browseButton.addEventListener("click", browseView);
+  buildCategoryFilters();
+  updateRatingDisplay();
+  document.querySelector("#ratingSlider").addEventListener("input", () => {
+    updateRatingDisplay();
+    browseView();
+  });
+  document.querySelector("#minPrice").addEventListener("input", browseView);
+  document.querySelector("#maxPrice").addEventListener("input", browseView);
+  document.querySelector("#sortSelect").addEventListener("change", browseView);
+  document.querySelector("#clearSort").addEventListener("click", () => {
+    document.querySelector("#sortSelect").value = "";
+    document
+      .querySelectorAll("#categoryFilters input")
+      .forEach((input) => (input.checked = false));
+    document.querySelector("#ratingSlider").value = 1;
+    document.querySelector("#minPrice").value = "";
+    document.querySelector("#maxPrice").value = "";
+    updateRatingDisplay();
+    browseView();
+  });
   cartButton.addEventListener("click", cartView);
   const aboutDialog = document.querySelector("#aboutDialog");
   const closeAbout = document.querySelector("#closeAbout");
   const cartDialog = document.querySelector("#cartPopup");
 
   cartButton.addEventListener("mouseenter", () => {
-    if(cart.length > 0){
-    cartDialog.show();
-    const cartPopupItems = document.querySelector("#cartPopupItems");
-    cartPopupItems.innerHTML = "";
-    groupCart().forEach(({ product: item, quantity }) => {
-      const itemBox = document.createElement("div");
-      itemBox.classList.add("popupItemBox");
-      const thumbnail = document.createElement("img");
-      const title = document.createElement("p");
-      const count = document.createElement("p");
-      thumbnail.src = item.images[0];
-      title.textContent = item.title;
-      count.textContent = `x${quantity}`;
+    if (cart.length > 0) {
+      cartDialog.show();
+      const cartPopupItems = document.querySelector("#cartPopupItems");
+      cartPopupItems.innerHTML = "";
+      groupCart().forEach(({ product: item, quantity }) => {
+        const itemBox = document.createElement("div");
+        itemBox.classList.add("popupItemBox");
+        const thumbnail = document.createElement("img");
+        const title = document.createElement("p");
+        const count = document.createElement("p");
+        thumbnail.src = item.images[0];
+        title.textContent = item.title;
+        count.textContent = `x${quantity}`;
 
-      itemBox.appendChild(thumbnail);
-      itemBox.appendChild(title);
-      itemBox.appendChild(count);
-      cartPopupItems.appendChild(itemBox);
-    });
+        itemBox.appendChild(thumbnail);
+        itemBox.appendChild(title);
+        itemBox.appendChild(count);
+        cartPopupItems.appendChild(itemBox);
+      });
     }
   });
   cartButton.addEventListener("mouseleave", () => {
