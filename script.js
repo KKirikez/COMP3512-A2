@@ -331,9 +331,13 @@ function updateSummary() {
     `$${shipping.toFixed(2)}`;
   document.querySelector("#summaryTax").textContent = `$${tax.toFixed(2)}`;
   document.querySelector("#summaryTotal").textContent = `$${total.toFixed(2)}`;
+  document.querySelector("#checkoutButton").disabled = cart.length === 0;
 }
 
 function checkout() {
+  if (cart.length === 0) {
+    return;
+  }
   cart = [];
   updateCartCount();
   alert("Your order was placed successfully!");
