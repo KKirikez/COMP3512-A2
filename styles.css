@@ -218,6 +218,9 @@ body {
 }
 
 .productCard {
+  border: 1px solid black;
+  padding: 1rem;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   width: 200px;
