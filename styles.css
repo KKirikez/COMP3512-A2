@@ -195,31 +195,54 @@ body {
 }
 
 #featured {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
+  padding: 1.5rem;
+}
+
+.featuredCard {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
   height: 34rem;
   padding: 1.5rem;
-  min-width: 100%;
-  background-color: aqua;
+  width: 22rem;
+  max-width: 100%;
+  position: relative;
 }
 
-#featuredImage {
+.featuredLabel {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 6px 12px;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.featuredImage {
   height: 250px;
   width: auto;
   max-width: 100%;
   object-fit: contain;
 }
 
-#featured h3 {
+.featuredCard h3 {
   margin-bottom: 0;
   text-align: center;
+  line-height: 1.3em;
+  height: 3.9em;
+  overflow: hidden;
 }
 
-#buyNowButton {
+.buyNowButton {
   margin-top: 12px;
   padding: 10px 24px;
   font-weight: bold;

@@ -42,41 +42,58 @@ function createStars(rating) {
   return stars;
 }
 
-function homeView() {
-  renderView("homeView");
-  let products = data.products;
-  const featuredSection = document.querySelector("#featured");
-  const productIndex = Math.floor(Math.random() * products.length);
-  let featuredProduct = products[productIndex];
+function pickRandomProducts(count) {
+  const remaining = [...data.products];
+  const picked = [];
+  while (picked.length < count && remaining.length > 0) {
+    const index = Math.floor(Math.random() * remaining.length);
+    picked.push(remaining.splice(index, 1)[0]);
+  }
+  return picked;
+}
 
-  featuredSection.innerHTML = "";
-
+function createFeaturedCard(product) {
+  const card = document.createElement("div");
+  const label = document.createElement("span");
   const image = document.createElement("img");
-  image.id = "featuredImage";
-  image.src = featuredProduct.images[0];
-  image.alt = featuredProduct.title;
-
-  const heading = document.createElement("h3");
-  heading.textContent = featuredProduct.brand
-    ? `The ${featuredProduct.title} from ${featuredProduct.brand}!`
-    : `The ${featuredProduct.title}!`;
-
+  const title = document.createElement("h3");
   const price = document.createElement("p");
-  price.textContent = `$${featuredProduct.price.toFixed(2)}`;
-
   const buyButton = document.createElement("button");
-  buyButton.id = "buyNowButton";
+
+  card.classList.add("featuredCard");
+  label.classList.add("featuredLabel");
+  image.classList.add("featuredImage");
+  buyButton.classList.add("buyNowButton");
+
+  label.textContent = "FEATURED";
+  image.src = product.images[0];
+  image.alt = product.title;
+  title.textContent = product.brand
+    ? `The ${product.title} from ${product.brand}!`
+    : `The ${product.title}!`;
+  price.textContent = `$${product.price.toFixed(2)}`;
   buyButton.textContent = "BUY IT NOW";
   buyButton.addEventListener("click", () => {
-    cart.push(featuredProduct);
+    cart.push(product);
     cartView();
   });
 
-  featuredSection.appendChild(image);
-  featuredSection.appendChild(heading);
-  featuredSection.appendChild(price);
-  featuredSection.appendChild(createStars(featuredProduct.rating));
-  featuredSection.appendChild(buyButton);
+  card.appendChild(label);
+  card.appendChild(image);
+  card.appendChild(title);
+  card.appendChild(price);
+  card.appendChild(createStars(product.rating));
+  card.appendChild(buyButton);
+  return card;
+}
+
+function homeView() {
+  renderView("homeView");
+  const featuredSection = document.querySelector("#featured");
+  featuredSection.innerHTML = "";
+  pickRandomProducts(3).forEach((product) => {
+    featuredSection.appendChild(createFeaturedCard(product));
+  });
 }
 function getCategories() {
   return [...new Set(data.products.map((p) => p.category))];
