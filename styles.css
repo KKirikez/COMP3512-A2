@@ -327,6 +327,51 @@ body {
   font-weight: bold;
 }
 
+#shoppingCartView {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#cartList {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+#checkoutCalculations {
+  background-color: rebeccapurple;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#shippingSummary {
+  display: flex;
+}
+
+#shippingSelection {
+  display: flex;
+  flex-direction: column;
+}
+
+#checkoutShipping {
+  background-color: red;
+  padding: 1rem;
+}
+
+#checkoutSummary {
+  background-color: lightblue;
+  padding: 1rem;
+}
+
+#checkoutButton {
+  min-width: 8rem;
+  min-height: 2.5rem;
+}
+
 #aboutDialog {
   max-width: 500px;
   padding: 20px 30px;

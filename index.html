@@ -127,7 +127,47 @@
           <span></span>
         </div>
         <div id="cartList"></div>
-        <div id="checkoutCalculations"></div>
+        <div id="checkoutCalculations">
+          <div id="shippingSummary">
+            <div id="checkoutShipping">
+              <h5>Shipping</h5>
+              <div id="shippingSelection">
+                <select name="shipping" id="shippingSelect">
+                  <option value="standard">Standard</option>
+                  <option value="express">Express</option>
+                  <option value="priority">Priority</option>
+                </select>
+                <select name="country" id="countrySelect">
+                  <option value="canada">Canada</option>
+                  <option value="american">United States</option>
+                  <option value="international">International</option>
+                </select>
+              </div>
+            </div>
+            <div id="checkoutSummary">
+              <h5>Summary</h5>
+              <table id="summaryTable">
+                <tr>
+                  <td>Merchandise</td>
+                  <td id="summaryMerchandise">$0.00</td>
+                </tr>
+                <tr>
+                  <td>Shipping</td>
+                  <td id="summaryShipping">$0.00</td>
+                </tr>
+                <tr>
+                  <td>Tax</td>
+                  <td id="summaryTax">$0.00</td>
+                </tr>
+                <tr>
+                  <th>Total</th>
+                  <th id="summaryTotal">$0.00</th>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <button id="checkoutButton">Checkout</button>
+        </div>
       </div>
     </div>
     <dialog id="aboutDialog">
