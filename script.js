@@ -307,11 +307,46 @@ function groupCart() {
   });
   return grouped;
 }
+const shippingRates = {
+  standard: { canada: 10, american: 15, international: 20 },
+  express: { canada: 25, american: 25, international: 30 },
+  priority: { canada: 35, american: 50, international: 50 },
+};
+
+function updateSummary() {
+  const shippingType = document.querySelector("#shippingSelect").value;
+  const country = document.querySelector("#countrySelect").value;
+
+  const merchandise = cart.reduce((total, item) => total + item.price, 0);
+  let shipping = shippingRates[shippingType][country];
+  if (merchandise > 500 || cart.length === 0) {
+    shipping = 0;
+  }
+  const tax = country === "canada" ? merchandise * 0.05 : 0;
+  const total = merchandise + shipping + tax;
+
+  document.querySelector("#summaryMerchandise").textContent =
+    `$${merchandise.toFixed(2)}`;
+  document.querySelector("#summaryShipping").textContent =
+    `$${shipping.toFixed(2)}`;
+  document.querySelector("#summaryTax").textContent = `$${tax.toFixed(2)}`;
+  document.querySelector("#summaryTotal").textContent = `$${total.toFixed(2)}`;
+}
+
+function checkout() {
+  cart = [];
+  updateCartCount();
+  alert("Your order was placed successfully!");
+  homeView();
+}
+
 function cartView() {
   renderView("shoppingCartView");
   updateCartCount();
   const cartList = document.querySelector("#cartList");
   cartList.innerHTML = "";
+
+  updateSummary();
 
   const grouped = groupCart();
 
@@ -463,6 +498,14 @@ document.addEventListener("DOMContentLoaded", () => {
       singleProductView.close();
     }
   });
+
+  document
+    .querySelector("#shippingSelect")
+    .addEventListener("change", updateSummary);
+  document
+    .querySelector("#countrySelect")
+    .addEventListener("change", updateSummary);
+  document.querySelector("#checkoutButton").addEventListener("click", checkout);
 
   homeView();
 });
