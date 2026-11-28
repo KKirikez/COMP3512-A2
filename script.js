@@ -124,7 +124,7 @@ function browseView() {
   if (sortValue) {
     const sortedBox = document.createElement("div");
     sortedBox.classList.add("categoryBox");
-    sortProducts(products.slice(0, 20), sortValue).forEach((product) => {
+    sortProducts(products, sortValue).forEach((product) => {
       sortedBox.appendChild(createProductCard(product));
     });
     itemBoxes.appendChild(sortedBox);
@@ -145,7 +145,7 @@ function browseView() {
   });
   console.log(categories);
 
-  products.slice(0, 20).forEach((product) => {
+  products.forEach((product) => {
     categoryBoxes.get(product.category).appendChild(createProductCard(product));
   });
 
@@ -206,14 +206,15 @@ function createProductCard(product) {
   addButton.textContent = "Add to cart ";
   addButton.appendChild(cartIcon);
 
-  addButton.addEventListener("click", () => {
+  addButton.addEventListener("click", (e) => {
+    e.stopPropagation();
     cart.push(product);
     updateCartCount();
     console.log(cart);
   });
 
-  img.addEventListener("click", () => {
-    alert(`This product has an ID of ${product.id}`);
+  productCard.addEventListener("click", () => {
+    showSingleProduct(product);
   });
 
   img.classList.add("productImage");
@@ -228,6 +229,72 @@ function createProductCard(product) {
   productCard.appendChild(img);
   productCard.appendChild(productCardBody);
   return productCard;
+}
+let currentProduct = null;
+let currentImageIndex = 0;
+
+function showProductImage(step) {
+  const images = currentProduct.images;
+  currentImageIndex =
+    (currentImageIndex + step + images.length) % images.length;
+  const image = document.querySelector("#singleProductImage");
+  image.src = images[currentImageIndex];
+  image.alt = currentProduct.title;
+}
+
+function addSingleProductToCart() {
+  const input = document.querySelector("#singleProductPurchaseBox input");
+  const quantity = input.value.trim() === "" ? 1 : Number(input.value);
+  if (quantity < 1) {
+    return;
+  }
+  for (let i = 0; i < quantity; i++) {
+    cart.push(currentProduct);
+  }
+  updateCartCount();
+  input.value = "";
+}
+
+function showSingleProduct(product) {
+  currentProduct = product;
+  currentImageIndex = 0;
+
+  document.querySelector("#singleProductBreadcrumb").textContent =
+    `Home > ${formatCategory(product.category)} > ${product.title}`;
+
+  showProductImage(0);
+  const singleImage = product.images.length <= 1;
+  document
+    .querySelector("#singleProductImageNext")
+    .classList.toggle("hidden", singleImage);
+  document
+    .querySelector("#singleProductImageBack")
+    .classList.toggle("hidden", singleImage);
+
+  document.querySelector("#singleProductTitle").textContent = product.title;
+  document.querySelector("#singleProductBrand").textContent =
+    product.brand ?? "";
+  document.querySelector("#singleProductPrice").textContent =
+    `$${product.price.toFixed(2)}`;
+
+  const sku = document.querySelector("#singleProductSku");
+  sku.innerHTML = "";
+  sku.append(`SKU: ${product.sku}`);
+  sku.appendChild(createStars(product.rating));
+
+  const categories = document.querySelector("#singleProductCategories");
+  categories.innerHTML = "";
+  product.tags.forEach((tag) => {
+    const tagText = document.createElement("p");
+    tagText.textContent = formatCategory(tag);
+    categories.appendChild(tagText);
+  });
+
+  document.querySelector("#singleProductDescription").textContent =
+    product.description;
+  document.querySelector("#singleProductPurchaseBox input").value = "";
+
+  document.querySelector("#singleProductView").showModal();
 }
 function groupCart() {
   const grouped = new Map();
@@ -388,6 +455,21 @@ document.addEventListener("DOMContentLoaded", () => {
   aboutDialog.addEventListener("click", (e) => {
     if (e.target === aboutDialog) {
       aboutDialog.close();
+    }
+  });
+  document
+    .querySelector("#singleProductImageNext")
+    .addEventListener("click", () => showProductImage(1));
+  document
+    .querySelector("#singleProductImageBack")
+    .addEventListener("click", () => showProductImage(-1));
+  document
+    .querySelector("#singleProductPurchaseBox button")
+    .addEventListener("click", addSingleProductToCart);
+  const singleProductView = document.querySelector("#singleProductView");
+  singleProductView.addEventListener("click", (e) => {
+    if (e.target === singleProductView) {
+      singleProductView.close();
     }
   });
 

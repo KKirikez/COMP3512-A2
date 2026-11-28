@@ -197,6 +197,36 @@ body {
   background-color: aqua;
 }
 
+#singleProduct {
+  max-width: 50rem;
+}
+
+#singleProductImageBox {
+  position: relative;
+  width: fit-content;
+}
+
+#singleProductImage {
+  display: block;
+  width: 30rem;
+  height: auto;
+}
+
+#singleProductImageBack,
+#singleProductImageNext {
+  position: absolute;
+  bottom: 10px;
+  cursor: pointer;
+}
+
+#singleProductImageBack {
+  left: 10px;
+}
+
+#singleProductImageNext {
+  right: 10px;
+}
+
 .icon {
   width: 1rem;
   height: 1rem;
@@ -237,9 +267,6 @@ body {
   line-height: 1.3em;
   height: 2.6em;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
 }
 
 .brand {
