@@ -315,15 +315,6 @@ function cartView() {
 
   const grouped = groupCart();
 
-  const header = document.createElement("div");
-  header.classList.add("cartRow", "cartHeader");
-  ["Items", "", "Price", "Quantity", "Subtotal", ""].forEach((label) => {
-    const cell = document.createElement("span");
-    cell.textContent = label;
-    header.appendChild(cell);
-  });
-  cartList.appendChild(header);
-
   grouped.forEach(({ product, quantity }) => {
     const row = document.createElement("div");
     const removeButton = document.createElement("button");
