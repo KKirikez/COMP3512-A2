@@ -47,9 +47,36 @@ function homeView() {
   let products = data.products;
   const featuredSection = document.querySelector("#featured");
   const productIndex = Math.floor(Math.random() * products.length);
-  console.log(productIndex);
   let featuredProduct = products[productIndex];
-  console.log(featuredProduct);
+
+  featuredSection.innerHTML = "";
+
+  const image = document.createElement("img");
+  image.id = "featuredImage";
+  image.src = featuredProduct.images[0];
+  image.alt = featuredProduct.title;
+
+  const heading = document.createElement("h3");
+  heading.textContent = featuredProduct.brand
+    ? `The ${featuredProduct.title} from ${featuredProduct.brand}!`
+    : `The ${featuredProduct.title}!`;
+
+  const price = document.createElement("p");
+  price.textContent = `$${featuredProduct.price.toFixed(2)}`;
+
+  const buyButton = document.createElement("button");
+  buyButton.id = "buyNowButton";
+  buyButton.textContent = "BUY IT NOW";
+  buyButton.addEventListener("click", () => {
+    cart.push(featuredProduct);
+    cartView();
+  });
+
+  featuredSection.appendChild(image);
+  featuredSection.appendChild(heading);
+  featuredSection.appendChild(price);
+  featuredSection.appendChild(createStars(featuredProduct.rating));
+  featuredSection.appendChild(buyButton);
 }
 function getCategories() {
   return [...new Set(data.products.map((p) => p.category))];
